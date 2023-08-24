@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"target": "es2022",
+		"declaration": true,
+		"outDir": "dist",
+		"strict": true,
+		"moduleResolution": "node",
+		"noImplicitAny": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"sourceMap": true,
+		"noUncheckedIndexedAccess": true,
+	},
+	"include": ["src"],
+}
