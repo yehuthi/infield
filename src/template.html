@@ -1,4 +1,26 @@
-<fieldset>
-	<legend>Hello</legend>
-	World!
+<fieldset part="root">
+	<legend id="label" part="label"><slot name="label"></slot></legend>
+	<div id="body" part="body"><slot></slot></div>
 </fieldset>
+
+<style>
+* { box-sizing: border-box; }
+
+fieldset {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	padding: 0;
+	border: none;
+	isolation: isolate;
+}
+#label {
+	z-index: 1;
+	display: flex;
+}
+#body {
+	display: flex;
+	flex-direction: column;
+	margin-block-start: calc(var(--body-gap) * -1);
+}
+</style>
