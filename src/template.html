@@ -1,5 +1,5 @@
-<fieldset part="root">
-	<legend id="label" part="label"><slot name="label"></slot></legend>
+<fieldset part="root border">
+	<div id="label" part="label"><slot name="label"></slot></div>
 	<div id="body" part="body"><slot></slot></div>
 </fieldset>
 
@@ -9,6 +9,7 @@
 fieldset {
 	display: flex;
 	flex-direction: column;
+	align-items: flex-start;
 	margin: 0;
 	padding: 0;
 	border: none;
@@ -16,11 +17,11 @@ fieldset {
 }
 #label {
 	z-index: 1;
-	display: flex;
 }
 #body {
 	display: flex;
 	flex-direction: column;
 	margin-block-start: calc(var(--body-gap) * -1);
+	align-self: stretch;
 }
 </style>

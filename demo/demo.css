@@ -47,11 +47,16 @@ in-field:focus-within > * {
 	caret-color: var(--accent-color);
 }
 
-in-field::part(root) {
+in-field::part(border) {
 	border: 1px dashed #000;
 	border-radius: 10px;
 }
 
 in-field > :nth-child(2) {
-	padding: max(1rem, var(--body-pad));
+	padding: 1rem;
+	padding-block-start: calc(var(--body-pad) + 1rem);
+}
+
+in-field::part(label) {
+	margin-block-start: calc(1rem - 1rem * var(--outside));
 }
