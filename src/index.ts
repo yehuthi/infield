@@ -1,20 +1,28 @@
 import templateHtml from "./template.html";
 import "./style.css";
 
+/** {@link InfieldElement} HTML attributes. */
 enum Attr {
 	LabelPosition = 'labelpos',
 }
+/** All {@link Attr} values. */
 const attrs = Object.freeze(Object.values(Attr));
 
+/** Values for the `labelpos` {@link Attr}. */
 enum LabelPosition {
 	Inside = 'inside',
 	Border = 'border',
 	Outside = 'outside',
 }
+/** All {@link LabelPosition} values. */
 const labelPositions = Object.freeze(Object.values(LabelPosition));
+/** Checks if the given value is a {@link LabelPosition}. */
 const isLabelPosition =  (a: any): a is LabelPosition =>
 	labelPositions.includes(a);
+/** The default / fallback {@link LabelPosition} value. */
+const labelPositionDefault = LabelPosition.Border;
 
+/** Replicates an element under a different tag. Doesn't replace in it the DOM but DOES take its children. */
 const elementReplicateWithTag = <T extends Element>(tag: string, element: T): HTMLElement => {
 	const result = document.createElement(tag);
 	for (const attr of element.attributes)
@@ -24,6 +32,7 @@ const elementReplicateWithTag = <T extends Element>(tag: string, element: T): HT
 	return result;
 }
 
+/** Ensures the given element is of the given tag. If it does not, the element with be replicated ({@link elementReplicateWithTag) and replaced. */
 const elementEnsureTag = <T extends HTMLElement>(tag: string, element: T): HTMLElement => {
 	if (element.tagName === tag) return element;
 	const replicated = elementReplicateWithTag(tag, element);
@@ -31,13 +40,15 @@ const elementEnsureTag = <T extends HTMLElement>(tag: string, element: T): HTMLE
 	return replicated;
 }
 
+/** The infield custom element. */
 class InfieldElement extends HTMLElement {
-	shadow: ShadowRoot;
+	static tag = 'in-field';
+	private shadow: ShadowRoot;
 
 	refreshLayout = () => {
 		const labelPosition = (() => {
 			const value = this.getAttribute(Attr.LabelPosition);
-			return isLabelPosition(value) ? value : LabelPosition.Border;
+			return isLabelPosition(value) ? value : labelPositionDefault;
 		})();
 
 		const fieldset = this.shadow.children[0]! as HTMLElement;
@@ -54,7 +65,7 @@ class InfieldElement extends HTMLElement {
 					const legendRect = legend.getBoundingClientRect();
 					const bodyRect = body.getBoundingClientRect();
 					const legendMid = legendRect.top + legendRect.height / 2;
-					const existingGap = parseInt(window.getComputedStyle(body).marginBlockStart ?? 0)
+					const existingGap = parseFloat(window.getComputedStyle(body).marginBlockStart ?? 0)
 					return bodyRect.top - legendMid - existingGap;
 				})();
 				const gapPx = `${gap}px`;
@@ -68,9 +79,9 @@ class InfieldElement extends HTMLElement {
 			case LabelPosition.Inside: {
 				fieldset.part.add('border');
 				body.part.remove('border');
-				legend = elementEnsureTag('div', legend);
+				legend = elementEnsureTag('DIV', legend);
 				const legendStyle = window.getComputedStyle(legend);
-				const gap = legend.getBoundingClientRect().height + parseInt(legendStyle.marginBlockStart) + parseInt(legendStyle.borderBlockStart);
+				const gap = legend.getBoundingClientRect().height + parseFloat(legendStyle.marginBlockStart) + parseFloat(legendStyle.borderBlockStart);
 				const gapPx = `${gap}px`;
 				fieldset.style.setProperty('--body-gap', gapPx);
 				fieldset.style.setProperty('--body-pad', gapPx);
@@ -82,7 +93,7 @@ class InfieldElement extends HTMLElement {
 			case LabelPosition.Outside: {
 				fieldset.part.remove('border');
 				body.part.add('border');
-				legend = elementEnsureTag('div', legend);
+				legend = elementEnsureTag('DIV', legend);
 				fieldset.style.setProperty('--body-gap', '0px');
 				fieldset.style.setProperty('--body-pad', '0px');
 				fieldset.style.setProperty('--border',	 '0');
@@ -108,10 +119,10 @@ class InfieldElement extends HTMLElement {
 		this.refreshLayout();
 	}
 
-	static template: HTMLTemplateElement = (() => {
+	private static template: HTMLTemplateElement = (() => {
 		const template = document.createElement('template');
 		template.innerHTML = templateHtml;
 		return template;
 	})();
 }
-customElements.define('in-field', InfieldElement);
+customElements.define(InfieldElement.tag, InfieldElement);
