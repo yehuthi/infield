@@ -36,10 +36,11 @@ in-field::part(label) {
 }
 
 in-field > :nth-child(2) {
-	background: transparent;
+	background: #c4cacd;
 	font-size: 2rem;
 	font-weight: lighter;
 }
+in-field[labelpos=border] > input { background: transparent; }
 
 in-field:focus-within > * {
 	color: var(--accent-color);
@@ -49,6 +50,8 @@ in-field:focus-within > * {
 
 in-field::part(border) {
 	border: 1px dashed #000;
+}
+in-field::part(border), in-field input {
 	border-radius: 10px;
 }
 
@@ -60,3 +63,4 @@ in-field > :nth-child(2) {
 in-field::part(label) {
 	margin-block-start: calc(1rem - 1rem * var(--outside));
 }
+
