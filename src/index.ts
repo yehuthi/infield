@@ -9,16 +9,19 @@ enum Attr {
 const attrs = Object.freeze(Object.values(Attr));
 
 /** Values for the `labelpos` {@link Attr}. */
-enum LabelPosition {
-	Inside = 'inside',
-	Border = 'border',
-	Outside = 'outside',
+const enum LabelPosition {
+	Border  = 0,
+	Inside  = 1,
+	Outside = 2,
 }
-/** All {@link LabelPosition} values. */
-const labelPositions = Object.freeze(Object.values(LabelPosition));
+/** An array of the names of {@link LabelPosition} values, and ordered such that it can be indexed
+* with a {@link LabelPosition} value. */
+const labelPositionNames = Object.freeze(["border", "inside", "outside"]);
 /** Checks if the given value is a {@link LabelPosition}. */
-const isLabelPosition =  (a: any): a is LabelPosition =>
-	labelPositions.includes(a);
+const labelPositionParse = (a: any): LabelPosition | null => {
+	const i = labelPositionNames.indexOf(a);
+	return i !== -1 ? i : null;
+}
 /** The default / fallback {@link LabelPosition} value. */
 const labelPositionDefault = LabelPosition.Border;
 
@@ -46,15 +49,12 @@ class InfieldElement extends HTMLElement {
 	private shadow: ShadowRoot;
 
 	refreshLayout = () => {
-		const labelPosition = (() => {
-			const value = this.getAttribute(Attr.LabelPosition);
-			return isLabelPosition(value) ? value : labelPositionDefault;
-		})();
+		const labelPosition = labelPositionParse(this.getAttribute(Attr.LabelPosition)) ?? labelPositionDefault;
 
 		const fieldset = this.shadow.children[0]! as HTMLElement;
 		let [legend, body] = fieldset.children as unknown as [HTMLElement, HTMLElement];
 
-		legend.className = labelPosition;
+		legend.className = labelPositionNames[labelPosition]!;
 
 		switch (labelPosition) {
 			case LabelPosition.Border: {
