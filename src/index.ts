@@ -48,19 +48,40 @@ class InfieldElement extends HTMLElement {
 	static tag = 'in-field';
 	private shadow: ShadowRoot;
 
+	private static setLabelPositionProperties = (labelPosition: LabelPosition, target: HTMLElement) => {
+		const t = '1';
+		const f = '0';
+		const [border, inside, outside] = ([[t,f,f],[f,t,f],[f,f,t]] as const)[labelPosition]!;
+		target.style.setProperty('--border', border);
+		target.style.setProperty('--inside', inside);
+		target.style.setProperty('--outside', outside);
+	}
+
+	private static updatePartBorder = (labelPosition: LabelPosition, fieldset: Element, body: Element) => {
+		const fieldsetBorder = () => {
+			fieldset.part.add('border');
+			body.part.remove('border');
+		};
+		const bodyBorder = () => {
+			fieldset.part.remove('border');
+			body.part.add('border');
+		};
+		[fieldsetBorder,fieldsetBorder,bodyBorder][labelPosition]!();
+	}
+
 	refreshLayout = () => {
 		const labelPosition = labelPositionParse(this.getAttribute(Attr.LabelPosition)) ?? labelPositionDefault;
-
 		const fieldset = this.shadow.children[0]! as HTMLElement;
 		let [legend, body] = fieldset.children as unknown as [HTMLElement, HTMLElement];
 
 		legend.className = labelPositionNames[labelPosition]!;
+		InfieldElement.setLabelPositionProperties(labelPosition, fieldset);
+		InfieldElement.updatePartBorder(labelPosition, fieldset, body);
+		legend = elementEnsureTag(['LEGEND','DIV','DIV'][labelPosition]!, legend);
 
-		switch (labelPosition) {
-			case LabelPosition.Border: {
-				fieldset.part.add('border');
-				body.part.remove('border');
-				legend = elementEnsureTag('LEGEND', legend);
+		[
+			// Border
+			() => {
 				const gap = (() => {
 					const legendRect = legend.getBoundingClientRect();
 					const bodyRect = body.getBoundingClientRect();
@@ -71,38 +92,21 @@ class InfieldElement extends HTMLElement {
 				const gapPx = `${gap}px`;
 				fieldset.style.setProperty('--body-gap', gapPx);
 				fieldset.style.setProperty('--body-pad', gapPx);
-				fieldset.style.setProperty('--border',	'1');
-				fieldset.style.setProperty('--inside',	'0');
-				fieldset.style.setProperty('--outside', '0');
-			} break;
-
-			case LabelPosition.Inside: {
-				fieldset.part.add('border');
-				body.part.remove('border');
-				legend = elementEnsureTag('DIV', legend);
+			},
+			// Inside
+			() => {
 				const legendStyle = window.getComputedStyle(legend);
 				const gap = legend.getBoundingClientRect().height + parseFloat(legendStyle.marginBlockStart) + parseFloat(legendStyle.borderBlockStart);
 				const gapPx = `${gap}px`;
 				fieldset.style.setProperty('--body-gap', gapPx);
 				fieldset.style.setProperty('--body-pad', gapPx);
-				fieldset.style.setProperty('--border',	'0');
-				fieldset.style.setProperty('--inside',	'1');
-				fieldset.style.setProperty('--outside', '0');
-			} break;
-
-			case LabelPosition.Outside: {
-				fieldset.part.remove('border');
-				body.part.add('border');
-				legend = elementEnsureTag('DIV', legend);
+			},
+			// Outside
+			() => {
 				fieldset.style.setProperty('--body-gap', '0px');
 				fieldset.style.setProperty('--body-pad', '0px');
-				fieldset.style.setProperty('--border',	 '0');
-				fieldset.style.setProperty('--inside',	 '0');
-				fieldset.style.setProperty('--outside',  '1');
-			} break;
-
-			default: labelPosition satisfies never
-		}
+			}
+		][labelPosition]!();
 	};
 
 	constructor() {
