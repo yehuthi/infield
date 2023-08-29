@@ -104,29 +104,29 @@ class InfieldElement extends HTMLElement {
 		[
 			// Border
 			() => {
-				const gap = (() => {
+				const gapPx = (() => {
 					const legendRect = legend.getBoundingClientRect();
 					const bodyRect = body.getBoundingClientRect();
 					const legendMid = legendRect.top + legendRect.height / 2;
 					const existingGap = parseFloat(window.getComputedStyle(body).marginBlockStart ?? 0)
-					return bodyRect.top - legendMid - existingGap;
+					const gap = bodyRect.top - legendMid - existingGap;
+					return `${gap}px`;
 				})();
-				const gapPx = `${gap}px`;
 				fieldset.style.setProperty(CssProp.BodyGap, gapPx);
 				fieldset.style.setProperty(CssProp.BodyPad, gapPx);
 			},
 			// Inside
 			() => {
 				const legendStyle = window.getComputedStyle(legend);
-				const gap = legend.getBoundingClientRect().height + parseFloat(legendStyle.marginBlockStart) + parseFloat(legendStyle.borderBlockStart);
-				const gapPx = `${gap}px`;
+				const gapPx = `${legend.getBoundingClientRect().height + parseFloat(legendStyle.marginBlockStart) + parseFloat(legendStyle.borderBlockStart)}px`;
 				fieldset.style.setProperty(CssProp.BodyGap, gapPx);
 				fieldset.style.setProperty(CssProp.BodyPad, gapPx);
 			},
 			// Outside
 			() => {
-				fieldset.style.setProperty(CssProp.BodyGap, '0px');
-				fieldset.style.setProperty(CssProp.BodyPad, '0px');
+				const gapPx = '0px';
+				fieldset.style.setProperty(CssProp.BodyGap, gapPx);
+				fieldset.style.setProperty(CssProp.BodyPad, gapPx);
 			},
 			// On Border
 			() => {
