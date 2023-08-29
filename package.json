@@ -1,28 +1,27 @@
 {
-  "name": "infield",
-  "version": "1.0.0",
-  "private": true,
-  "description": "HTML infield labels.",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "rollup --config",
-	"dev": "nodemon -e html,css,ts -w src -x 'pnpm run build'"
-  },
-  "keywords": [],
-  "author": "Yehuthi <yehuthith@gmail.com>",
-  "devDependencies": {
-    "@rollup/plugin-terser": "^0.4.3",
-    "@rollup/plugin-typescript": "^11.1.2",
-    "@types/html-minifier-terser": "^7.0.0",
-    "html-minifier-terser": "^7.2.0",
-    "nodemon": "^3.0.1",
-    "rollup": "^3.28.0",
-    "rollup-plugin-import-css": "^3.3.1",
-    "tslib": "^2.6.1",
-    "typescript": "^5.1.6"
-  },
-  "files": [
-    "dist",
-    "README.md"
-  ]
+	"name": "infield",
+	"version": "1.0.0",
+	"description": "HTML infield labels.",
+	"main": "dist/index.js",
+	"scripts": {
+		"build": "rollup --config",
+		"dev": "nodemon -e html,css,ts -w src -x 'pnpm run build'"
+	},
+	"keywords": ["html", "field", "ifta", "floating", "label", "form", "custom"],
+	"author": "Yehuthi <yehuthith@gmail.com>",
+	"devDependencies": {
+		"@rollup/plugin-terser": "^0.4.3",
+		"@rollup/plugin-typescript": "^11.1.2",
+		"@types/html-minifier-terser": "^7.0.0",
+		"html-minifier-terser": "^7.2.0",
+		"nodemon": "^3.0.1",
+		"rollup": "^3.28.0",
+		"rollup-plugin-import-css": "^3.3.1",
+		"tslib": "^2.6.1",
+		"typescript": "^5.1.6"
+	},
+	"files": [
+		"dist",
+		"README.md"
+	]
 }
