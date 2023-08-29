@@ -9,6 +9,10 @@ in-field > :not([slot="label"]) {
 	height: 100%;
 	border: none;
 	outline: none;
-	padding: 0;
-	padding-block-start: var(--body-gap);
+	padding: 0.5rem;
+	padding-block-start: calc(0.5rem + var(--body-gap));
+}
+
+in-field::part(label) {
+	margin-block-start: calc(0.5rem * max(var(--inside), var(--border)));
 }

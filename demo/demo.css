@@ -67,4 +67,3 @@ in-field > :nth-child(2) {
 in-field::part(label) {
 	margin-block-start: calc(1rem * max(var(--inside), var(--border)));
 }
-
