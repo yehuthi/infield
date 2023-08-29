@@ -43,6 +43,19 @@ const elementEnsureTag = <T extends HTMLElement>(tag: string, element: T): HTMLE
 	return replicated;
 }
 
+const enum CssProp {
+	/** Set to 1 if `labelpos` ({@link LabelPosition}) is `border`, otherwise 0. */
+	Border = '--border',
+	/** Set to 1 if `labelpos` ({@link LabelPosition}) is `inside`, otherwise 0. */
+	Inside = '--inside',
+	/** Set to 1 if `labelpos` ({@link LabelPosition}) is `outside`, otherwise 0. */
+	Outside = '--outside',
+	/** The distance between the body (usually <input>) and the label slot. */
+	BodyGap = '--body-gap',
+	/** The minimum top padding the body (usually <input>) should have to not collide with the label. */
+	BodyPad = '--body-pad',
+}
+
 /** The infield custom element. */
 class InfieldElement extends HTMLElement {
 	static tag = 'in-field';
@@ -52,9 +65,9 @@ class InfieldElement extends HTMLElement {
 		const t = '1';
 		const f = '0';
 		const [border, inside, outside] = ([[t,f,f],[f,t,f],[f,f,t]] as const)[labelPosition]!;
-		target.style.setProperty('--border', border);
-		target.style.setProperty('--inside', inside);
-		target.style.setProperty('--outside', outside);
+		target.style.setProperty(CssProp.Border, border);
+		target.style.setProperty(CssProp.Inside, inside);
+		target.style.setProperty(CssProp.Outside, outside);
 	}
 
 	private static updatePartBorder = (labelPosition: LabelPosition, fieldset: Element, body: Element) => {
@@ -90,21 +103,21 @@ class InfieldElement extends HTMLElement {
 					return bodyRect.top - legendMid - existingGap;
 				})();
 				const gapPx = `${gap}px`;
-				fieldset.style.setProperty('--body-gap', gapPx);
-				fieldset.style.setProperty('--body-pad', gapPx);
+				fieldset.style.setProperty(CssProp.BodyGap, gapPx);
+				fieldset.style.setProperty(CssProp.BodyPad, gapPx);
 			},
 			// Inside
 			() => {
 				const legendStyle = window.getComputedStyle(legend);
 				const gap = legend.getBoundingClientRect().height + parseFloat(legendStyle.marginBlockStart) + parseFloat(legendStyle.borderBlockStart);
 				const gapPx = `${gap}px`;
-				fieldset.style.setProperty('--body-gap', gapPx);
-				fieldset.style.setProperty('--body-pad', gapPx);
+				fieldset.style.setProperty(CssProp.BodyGap, gapPx);
+				fieldset.style.setProperty(CssProp.BodyPad, gapPx);
 			},
 			// Outside
 			() => {
-				fieldset.style.setProperty('--body-gap', '0px');
-				fieldset.style.setProperty('--body-pad', '0px');
+				fieldset.style.setProperty(CssProp.BodyGap, '0px');
+				fieldset.style.setProperty(CssProp.BodyPad, '0px');
 			}
 		][labelPosition]!();
 	};
