@@ -20,6 +20,11 @@ Example:
 
 Note: attributes are case-sensitive.
 
+### JavaScript API
+
+The JavaScript API only defines a function `refreshLayout(): void` for `<in-field>` elements. It's mainly useful if your label changed in a way that might break the layout, or more specifically, if it changed its height.
+This is not automatic because the vast majority of the time labels are static and small, thus deemed not worth it for performance.
+
 ### Label Position
 
 Label position can be set with the `labelpos` attribute. It may be:
