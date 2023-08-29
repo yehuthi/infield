@@ -1,14 +1,23 @@
 {
 	"name": "infield",
-	"version": "1.0.0",
+	"version": "0.0.1",
 	"description": "HTML infield labels.",
-	"main": "dist/index.js",
+	"browser": "dist/index.js",
 	"scripts": {
 		"build": "rollup --config",
 		"dev": "nodemon -e html,css,ts -w src -x 'pnpm run build'"
 	},
 	"keywords": ["html", "field", "ifta", "floating", "label", "form", "custom"],
 	"author": "Yehuthi <yehuthith@gmail.com>",
+	"homepage": "https://github.com/yehuthi/infield",
+	"bugs": {
+		"email": "yehuthith@gmail.com",
+		"url": "https://github.com/yehuthi/infield/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/yehuthi/infield.git"
+	},
 	"devDependencies": {
 		"@rollup/plugin-terser": "^0.4.3",
 		"@rollup/plugin-typescript": "^11.1.2",
@@ -21,7 +30,9 @@
 		"typescript": "^5.1.6"
 	},
 	"files": [
-		"dist",
+		"dist/*.ts",
+		"dist/*.css",
 		"README.md"
-	]
+	],
+	"license": "(MIT OR Apache-2.0)"
 }
