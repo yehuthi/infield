@@ -55,6 +55,10 @@ in-field::part(border), in-field input {
 	border-radius: 10px;
 }
 
+in-field[labelpos=onborder] > label {
+	text-shadow: 0 0 10px #c4cacd, 0 0 10px #c4cacd, 0 0 10px #c4cacd, 0 0 10px #c4cacd, 0 0 10px #c4cacd, 0 0 10px #c4cacd, 0 0 10px #c4cacd, 0 0 10px #c4cacd, 0 0 10px #c4cacd;
+}
+
 in-field > :nth-child(2) {
 	padding: 1rem;
 	padding-block-start: calc(var(--body-pad) + 1rem);

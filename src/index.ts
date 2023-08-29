@@ -13,10 +13,11 @@ const enum LabelPosition {
 	Border  = 0,
 	Inside  = 1,
 	Outside = 2,
+	OnBorder = 3,
 }
 /** An array of the names of {@link LabelPosition} values, and ordered such that it can be indexed
 * with a {@link LabelPosition} value. */
-const labelPositionNames = Object.freeze(["border", "inside", "outside"]);
+const labelPositionNames = Object.freeze(["border", "inside", "outside", "onborder"]);
 /** Checks if the given value is a {@link LabelPosition}. */
 const labelPositionParse = (a: any): LabelPosition | null => {
 	const i = labelPositionNames.indexOf(a);
@@ -50,6 +51,8 @@ const enum CssProp {
 	Inside = '--inside',
 	/** Set to 1 if `labelpos` ({@link LabelPosition}) is `outside`, otherwise 0. */
 	Outside = '--outside',
+	/** Set to 1 if `labelpos` ({@link LabelPosition}) is `onborder`, otherwise 0. */
+	OnBorder = '--onborder',
 	/** The distance between the body (usually <input>) and the label slot. */
 	BodyGap = '--body-gap',
 	/** The minimum top padding the body (usually <input>) should have to not collide with the label. */
@@ -64,10 +67,11 @@ class InfieldElement extends HTMLElement {
 	private static setLabelPositionProperties = (labelPosition: LabelPosition, target: HTMLElement) => {
 		const t = '1';
 		const f = '0';
-		const [border, inside, outside] = ([[t,f,f],[f,t,f],[f,f,t]] as const)[labelPosition]!;
+		const [border, inside, outside, onborder] = ([[t,f,f,f],[f,t,f,f],[f,f,t,f],[f,f,f,t]] as const)[labelPosition]!;
 		target.style.setProperty(CssProp.Border, border);
 		target.style.setProperty(CssProp.Inside, inside);
 		target.style.setProperty(CssProp.Outside, outside);
+		target.style.setProperty(CssProp.OnBorder, onborder);
 	}
 
 	private static updatePartBorder = (labelPosition: LabelPosition, fieldset: Element, body: Element) => {
@@ -79,7 +83,7 @@ class InfieldElement extends HTMLElement {
 			fieldset.part.remove('border');
 			body.part.add('border');
 		};
-		[fieldsetBorder,fieldsetBorder,bodyBorder][labelPosition]!();
+		[fieldsetBorder,fieldsetBorder,bodyBorder,bodyBorder][labelPosition]!();
 	}
 
 	refreshLayout = () => {
@@ -90,7 +94,7 @@ class InfieldElement extends HTMLElement {
 		legend.className = labelPositionNames[labelPosition]!;
 		InfieldElement.setLabelPositionProperties(labelPosition, fieldset);
 		InfieldElement.updatePartBorder(labelPosition, fieldset, body);
-		legend = elementEnsureTag(['LEGEND','DIV','DIV'][labelPosition]!, legend);
+		legend = elementEnsureTag(['LEGEND','DIV','DIV','DIV'][labelPosition]!, legend);
 
 		[
 			// Border
@@ -118,7 +122,16 @@ class InfieldElement extends HTMLElement {
 			() => {
 				fieldset.style.setProperty(CssProp.BodyGap, '0px');
 				fieldset.style.setProperty(CssProp.BodyPad, '0px');
-			}
+			},
+			// On Border
+			() => {
+				const legendStyle = window.getComputedStyle(legend);
+				const clientHeight = legend.getBoundingClientRect().height;
+				const bottomMarginTotal = parseFloat(legendStyle.marginBlockEnd) + parseFloat(legendStyle.borderBlockEnd);
+				const clientHeightHalf = clientHeight / 2;
+				fieldset.style.setProperty(CssProp.BodyGap, `${bottomMarginTotal + clientHeightHalf}px`);
+				fieldset.style.setProperty(CssProp.BodyPad, `${clientHeight / 2}px`);
+			},
 		][labelPosition]!();
 	};
 
