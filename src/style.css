@@ -10,4 +10,5 @@ in-field > :not([slot="label"]) {
 	border: none;
 	outline: none;
 	padding: 0;
+	padding-block-start: var(--body-gap);
 }
