@@ -18,6 +18,8 @@ Example:
 </in-field>
 ```
 
+Note: attributes are case-sensitive.
+
 ### Label Position
 
 Label position can be set with the `labelpos` attribute. It may be:
