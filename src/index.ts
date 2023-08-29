@@ -4,15 +4,20 @@ import "./style.css";
 /** {@link InfieldElement} HTML attributes. */
 enum Attr {
 	LabelPosition = 'labelpos',
+	Float = 'float',
 }
 /** All {@link Attr} values. */
 const attrs = Object.freeze(Object.values(Attr));
 
 /** Values for the `labelpos` {@link Attr}. */
 const enum LabelPosition {
-	Border  = 0,
-	Inside  = 1,
+	/** Places the label at the border of the body (the border under the label is not rendered, so the border and label will not overlap). */
+	Border = 0,
+	/** Places the label inside the body. */
+	Inside = 1,
+	/** Places the label outside the body. */
 	Outside = 2,
+	/** Places the label on top of the border of the body (the entire border is rendered, so the border and the label will overlap). */
 	OnBorder = 3,
 }
 /** An array of the names of {@link LabelPosition} values, and ordered such that it can be indexed
