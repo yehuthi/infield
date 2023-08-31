@@ -51,7 +51,7 @@ in-field:focus-within > * {
 in-field::part(border) {
 	border: 1px dashed #000;
 }
-in-field::part(border), in-field input {
+in-field::part(border), in-field > input {
 	border-radius: 10px;
 }
 

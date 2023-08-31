@@ -1,4 +1,6 @@
-/* Light DOM styles */
+/*** Light DOM styles ***/
+
+/** Essential **/
 
 in-field > * {
 	box-sizing: border-box;
@@ -9,10 +11,24 @@ in-field > :not([slot="label"]) {
 	height: 100%;
 	border: none;
 	outline: none;
-	padding: 0.5rem;
-	padding-block-start: calc(0.5rem + var(--body-gap));
+}
+
+/** Style Defaults **/
+
+in-field::part(border), in-field > :not(label) {
+	border-radius: 2px;
+}
+
+in-field::part(border) { border: 1px solid lightgrey; }
+in-field:focus-within::part(border) { border-color: #000; }
+
+in-field > :not([slot="label"]) {
+	padding: 0.25rem;
+	padding-block-start: calc(0.25rem + var(--body-gap));
 }
 
 in-field::part(label) {
-	margin-block-start: calc(0.5rem * max(var(--inside), var(--border)));
+	margin-block-start: calc(0.25rem * max(var(--inside), var(--border)));
+	margin-inline-start: 0.25rem;
 }
+
